@@ -1,0 +1,737 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحة إهداء خاص - Dedication Page</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@300;400;600;800;900&family=Reem+Kufi:wght@500;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                        amiri: ['Amiri', 'serif'],
+                        kufi: ['Reem Kufi', 'sans-serif'],
+                    },
+                    colors: {
+                        gold: {
+                            100: '#FFF9E6',
+                            300: '#FFE082',
+                            400: '#FFD54F',
+                            500: '#FFC107',
+                            600: '#FFB300',
+                            700: '#F57F17',
+                        }
+                    },
+                    animation: {
+                        'spin-slow': 'spin 12s linear infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #0d0a12;
+            color: #f3f4f6;
+            overflow-x: hidden;
+        }
+
+        .glass-card {
+            background: rgba(23, 15, 38, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 215, 0, 0.18);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+        }
+
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #FFF5C0 0%, #E6C667 50%, #B88E2B 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .vinyl-disc {
+            background: radial-gradient(circle, #222 25%, #111 26%, #222 27%, #111 40%, #222 41%, #111 60%, #000 70%);
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0d0a12;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #372a4d;
+            border-radius: 10px;
+        }
+
+        #particleCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .intro-overlay {
+            transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.8s ease;
+        }
+    </style>
+</head>
+<body class="min-h-screen relative flex flex-col items-center justify-between selection:bg-amber-500 selection:text-black">
+
+    <canvas id="particleCanvas"></canvas>
+
+    <!-- Header & Admin Lock Button -->
+    <header class="w-full max-w-4xl p-4 flex justify-between items-center z-20">
+        <div class="flex items-center space-x-2 space-x-reverse">
+            <span class="w-3 h-3 rounded-full bg-amber-400 animate-ping"></span>
+            <span class="text-xs tracking-widest text-amber-300 font-semibold uppercase">صفحة إهداء خاصة</span>
+        </div>
+        
+        <button id="lockBtn" onclick="openAuthModal()" title="إعدادات الآدمن" class="w-10 h-10 rounded-full bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center justify-center transition-all duration-300 shadow-lg hover:scale-110 active:scale-95">
+            <i class="fa-solid fa-lock text-base"></i>
+        </button>
+    </header>
+
+    <!-- Intro Envelope Cover -->
+    <div id="introScreen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gradient-to-br from-gray-950 via-rose-950 to-gray-950 intro-overlay">
+        <div class="text-center max-w-sm w-full space-y-6">
+            <div class="relative w-36 h-36 mx-auto cursor-pointer group" onclick="openDedication()">
+                <div class="absolute inset-0 rounded-full bg-amber-500/20 blur-xl group-hover:bg-amber-500/40 transition-all duration-500"></div>
+                <div class="relative w-full h-full rounded-full bg-gradient-to-tr from-amber-600 to-yellow-300 p-1 shadow-2xl flex items-center justify-center transform group-hover:scale-105 transition-all duration-300">
+                    <div class="w-full h-full rounded-full bg-slate-950 flex flex-col items-center justify-center text-amber-400 space-y-2">
+                        <i class="fa-solid fa-envelope-open-text text-4xl animate-bounce"></i>
+                        <span class="text-xs font-bold tracking-wider text-amber-200">إضغط للفتح</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <h2 class="text-xl font-bold text-amber-100" id="introRecipientName">وصلتك رسالة إهداء جديدة ✨</h2>
+                <p class="text-xs text-amber-200/70">انقر على المغلف لمشاهدة المضمون وسماع الأغنية المرفقة</p>
+            </div>
+
+            <button onclick="openDedication()" class="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 text-slate-950 font-extrabold shadow-lg shadow-amber-500/20 hover:shadow-amber-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all text-sm flex items-center justify-center gap-2">
+                <span>فتح بطاقة الإهداء</span>
+                <i class="fa-solid fa-heart text-rose-700"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content Container -->
+    <main class="w-full max-w-2xl px-4 py-6 z-10 space-y-8 my-auto">
+
+        <!-- Titles & Badges -->
+        <section class="text-center space-y-4">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-medium">
+                <i class="fa-solid fa-sparkles"></i>
+                <span id="displayOccasion">إهداء خاص ومميز</span>
+                <i class="fa-solid fa-sparkles"></i>
+            </div>
+
+            <div class="space-y-2">
+                <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight">
+                    <span class="text-slate-300 text-lg sm:text-xl font-normal block mb-1">إلى حبيبة قلبي:</span>
+                    <span id="displayTo" class="gold-gradient-text font-kufi">شيماء</span>
+                </h1>
+                <p class="text-sm text-slate-400 flex items-center justify-center gap-2 pt-1">
+                    <span>من:</span>
+                    <span id="displayFrom" class="text-amber-300 font-semibold text-base">عبدالله معتصم</span>
+                    <i class="fa-solid fa-heart text-rose-500 text-xs"></i>
+                </p>
+            </div>
+        </section>
+
+        <!-- Media & Audio Player Card -->
+        <section class="glass-card rounded-3xl p-6 relative overflow-hidden space-y-6">
+            <div class="absolute -top-24 -right-24 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            
+            <!-- Image Showcase -->
+            <div class="relative w-full aspect-video sm:aspect-[16/9] rounded-2xl overflow-hidden shadow-2xl border border-amber-500/20 group">
+                <img id="displayImage" src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=1200" alt="صورة الإهداء" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
+                <div class="absolute bottom-3 right-3 left-3 flex justify-between items-end">
+                    <span id="displayDate" class="text-xs bg-black/60 backdrop-blur-md text-amber-300 px-3 py-1 rounded-full border border-amber-500/20">
+                        <i class="fa-regular fa-calendar-alt ml-1"></i> 2026 / 07 / 30
+                    </span>
+                    <button onclick="triggerConfetti()" class="w-9 h-9 rounded-full bg-amber-500/80 text-black flex items-center justify-center shadow-lg hover:bg-amber-400 transition-all">
+                        <i class="fa-solid fa-wand-magic-sparkles text-sm"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Enhanced Music Player with Next/Prev Songs -->
+            <div class="bg-slate-950/60 rounded-2xl p-4 border border-white/5 flex flex-col sm:flex-row items-center gap-4">
+                
+                <div class="relative w-20 h-20 flex-shrink-0">
+                    <div id="vinylDisc" class="w-full h-full rounded-full vinyl-disc border-2 border-amber-500/40 shadow-xl flex items-center justify-center animate-spin-slow" style="animation-play-state: paused;">
+                        <div class="w-7 h-7 rounded-full bg-amber-500/20 border border-amber-400/50 flex items-center justify-center">
+                            <div class="w-2.5 h-2.5 rounded-full bg-amber-300"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex-1 w-full space-y-2 text-center sm:text-right">
+                    <div>
+                        <h4 id="displaySongTitle" class="text-sm font-bold text-amber-200 truncate">لحن جيتار رومانسي</h4>
+                        <p id="displaySongArtist" class="text-xs text-slate-400 truncate">الأغنية رقم <span id="currentSongIndexText">1</span> من <span id="totalSongsText">3</span></p>
+                    </div>
+
+                    <div class="space-y-1">
+                        <input type="range" id="audioProgressBar" value="0" min="0" max="100" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-400">
+                        <div class="flex justify-between text-[10px] text-slate-500 font-mono">
+                            <span id="currentTime">0:00</span>
+                            <span id="durationTime">0:00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Music Control Buttons -->
+                <div class="flex items-center gap-2">
+                    <button onclick="changeSong(-1)" title="الأغنية السابقة" class="w-9 h-9 rounded-full bg-slate-800/80 text-amber-300 flex items-center justify-center hover:bg-slate-700 transition-all">
+                        <i class="fa-solid fa-backward-step text-sm"></i>
+                    </button>
+                    <button id="playPauseBtn" onclick="toggleAudio()" class="w-12 h-12 rounded-full bg-gradient-to-tr from-amber-500 to-yellow-300 text-slate-950 flex items-center justify-center font-bold shadow-lg shadow-amber-500/20 hover:scale-105 active:scale-95 transition-all">
+                        <i id="playIcon" class="fa-solid fa-play ml-0.5 text-lg"></i>
+                    </button>
+                    <button onclick="changeSong(1)" title="الأغنية التالية" class="w-9 h-9 rounded-full bg-slate-800/80 text-amber-300 flex items-center justify-center hover:bg-slate-700 transition-all">
+                        <i class="fa-solid fa-forward-step text-sm"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <audio id="bgAudio" preload="auto" loop></audio>
+        </section>
+
+        <!-- Message Box -->
+        <section class="glass-card rounded-3xl p-6 sm:p-8 space-y-4 relative">
+            <div class="flex items-center gap-2 text-amber-400 font-semibold text-sm border-b border-white/10 pb-3">
+                <i class="fa-solid fa-quote-right text-amber-500 text-lg"></i>
+                <span>رسالة من القلب</span>
+            </div>
+
+            <div class="text-slate-200 font-amiri text-lg sm:text-xl leading-relaxed sm:leading-loose text-justify whitespace-pre-line" id="displayMessage">
+                إلى من يطيب بهم العمر وتزهر برفقته الأيام.. 
+                كتبت لك هذه الكلمات لأعبر عن مدى امتناني وتقديري لحضورك الجميل في حياتي. 
+                أتمنى لك دوام الفرح والنجاح والسعادة التي تستحقها دائماً. كل عام وأنت أثر جميل وروح أعتز بها.
+            </div>
+
+            <div class="pt-4 flex justify-end">
+                <div class="text-left font-kufi">
+                    <span class="block text-xs text-slate-400">المخلص دائماً،</span>
+                    <span id="displaySignature" class="text-amber-300 font-bold text-lg">عبدالله</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Counter -->
+        <section class="grid grid-cols-2 gap-4">
+            <div class="glass-card p-4 rounded-2xl text-center space-y-1">
+                <i class="fa-solid fa-heart-pulse text-rose-500 text-xl"></i>
+                <div class="text-2xl font-bold text-amber-200 font-mono">100%</div>
+                <div class="text-xs text-slate-400">معزة ومحبة</div>
+            </div>
+
+            <div class="glass-card p-4 rounded-2xl text-center space-y-1">
+                <i class="fa-solid fa-star text-amber-400 text-xl"></i>
+                <div class="text-2xl font-bold text-amber-200 font-mono">للأبد</div>
+                <div class="text-xs text-slate-400">لحظات لا تُنسى</div>
+            </div>
+        </section>
+
+        <!-- Action Links -->
+        <section class="flex flex-col sm:flex-row gap-3">
+            <button onclick="copyShareLink()" class="flex-1 py-3 px-4 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-amber-200 border border-amber-500/20 text-xs font-semibold flex items-center justify-center gap-2 transition-all">
+                <i class="fa-solid fa-link"></i>
+                <span>نسخ رابط الصفحة</span>
+            </button>
+            <button onclick="shareWhatsApp()" class="flex-1 py-3 px-4 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 text-xs font-semibold flex items-center justify-center gap-2 transition-all">
+                <i class="fa-brands fa-whatsapp text-sm"></i>
+                <span>مشاركة عبر واتساب</span>
+            </button>
+        </section>
+
+    </main>
+
+    <footer class="w-full text-center py-6 text-slate-500 text-xs z-10 space-y-1">
+        <p>Designed by : Abdullh Moatasem 2026🇾🇪</p>
+    </footer>
+
+    <!-- Password Auth Modal -->
+    <div id="authModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-slate-900 border border-amber-500/30 rounded-3xl w-full max-w-sm p-6 space-y-4 shadow-2xl text-center relative">
+            <button onclick="closeAuthModal()" class="absolute top-4 left-4 text-slate-400 hover:text-white p-1">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+
+            <div class="w-14 h-14 bg-amber-500/10 border border-amber-500/30 rounded-full flex items-center justify-center mx-auto text-amber-400 text-2xl">
+                <i class="fa-solid fa-key"></i>
+            </div>
+
+            <div class="space-y-1">
+                <h3 class="text-base font-bold text-amber-300">منطقة الإدارة</h3>
+                <p class="text-xs text-slate-400">أدخل كلمة السر للتعديل</p>
+            </div>
+
+            <form onsubmit="verifyPassword(event)" class="space-y-3">
+                <div>
+                    <input type="password" id="inputPass" required class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-center text-amber-100 focus:border-amber-400 outline-none font-mono text-sm tracking-widest" placeholder="كلمة السر...">
+                    <p id="passError" class="text-rose-500 text-[11px] mt-1 hidden">كلمة السر غير صحيحة!</p>
+                </div>
+
+                <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-bold text-sm hover:brightness-110 transition-all shadow-lg">
+                    تأكيد الدخول
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Modal (Customization) -->
+    <div id="editModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-slate-900 border border-amber-500/30 rounded-3xl w-full max-w-lg max-h-[90vh] overflow-y-auto p-6 space-y-5 shadow-2xl text-right">
+            
+            <div class="flex justify-between items-center border-b border-white/10 pb-3">
+                <h3 class="text-lg font-bold text-amber-300 flex items-center gap-2">
+                    <i class="fa-solid fa-sliders"></i>
+                    <span>تخصيص كامل الإهداء</span>
+                </h3>
+                <button onclick="toggleEditModal()" class="text-slate-400 hover:text-white p-1">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <form id="editForm" onsubmit="saveCustomizations(event)" class="space-y-4 text-xs">
+                
+                <div>
+                    <label class="block text-slate-300 font-semibold mb-1">مناسبة الإهداء</label>
+                    <input type="text" id="inputOccasion" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-amber-100 focus:border-amber-400 outline-none">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-slate-300 font-semibold mb-1">اسم المهدَى إليه (إلى)</label>
+                        <input type="text" id="inputTo" required class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-amber-100 focus:border-amber-400 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-slate-300 font-semibold mb-1">اسم الراسل (من)</label>
+                        <input type="text" id="inputFrom" required class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-amber-100 focus:border-amber-400 outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-slate-300 font-semibold mb-1">نص الرسالة</label>
+                    <textarea id="inputMessage" rows="4" required class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-amber-100 focus:border-amber-400 outline-none leading-relaxed"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-slate-300 font-semibold mb-1">رابط الصورة المميزة (URL)</label>
+                    <input type="url" id="inputImage" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-amber-100 focus:border-amber-400 outline-none">
+                </div>
+
+                <!-- Song Selector in Admin Panel -->
+                <div class="space-y-2 border-t border-b border-white/10 py-3">
+                    <label class="block text-amber-300 font-semibold">اختر الأغنية أو أضف رابط MP3 خاص:</label>
+                    
+                    <select id="selectSongPreset" onchange="handlePresetSongChange()" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-amber-100 focus:border-amber-400 outline-none">
+                        <option value="0">الأغنية 1: لحن جيتار رومانسي</option>
+                        <option value="1">الأغنية 2: موسيقى بيانو وورود</option>
+                        <option value="2">الأغنية 3: لحن سنفونية هادئة</option>
+                        <option value="custom">-- إضافة رابط أغنية خاص (MP3) --</option>
+                    </select>
+
+                    <div id="customSongInputs" class="space-y-2 hidden pt-2">
+                        <input type="text" id="inputSongTitle" placeholder="اسم الأغنية الخارجي" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-amber-100 focus:border-amber-400 outline-none">
+                        <input type="url" id="inputAudioUrl" placeholder="رابط الأغنية المباشر https://...mp3" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-amber-100 focus:border-amber-400 outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-slate-300 font-semibold mb-1">تاريخ المناسبة</label>
+                    <input type="text" id="inputDate" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-amber-100 focus:border-amber-400 outline-none">
+                </div>
+
+                <div class="pt-3 flex gap-2">
+                    <button type="submit" class="flex-1 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-bold text-sm hover:brightness-110 transition-all">
+                        حفظ التغييرات
+                    </button>
+                    <button type="button" onclick="toggleEditModal()" class="py-3 px-4 rounded-xl bg-slate-800 text-slate-300 font-semibold text-sm hover:bg-slate-700 transition-all">
+                        إلغاء
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-amber-400 text-slate-950 font-bold px-5 py-2.5 rounded-full shadow-2xl text-xs flex items-center gap-2 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <i class="fa-solid fa-check-circle"></i>
+        <span id="toastMsg">تم التحديث بنجاح!</span>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        const ADMIN_PASSWORD = "tommy@100@200";
+
+        // Playlist Array
+        let playlist = [
+            {
+                title: "لحن جيتار رومانسي",
+                url: "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=romantic-acoustic-guitar-113529.mp3"
+            },
+            {
+                title: "موسيقى بيانو وورود",
+                url: "https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a883a9.mp3?filename=romantic-piano-10781.mp3"
+            },
+            {
+                title: "لحن سنفونية هادئة",
+                url: "https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3?filename=love-background-music-10702.mp3"
+            }
+        ];
+
+        let currentSongIndex = 0;
+        let isPlaying = false;
+
+        const audio = document.getElementById('bgAudio');
+        const playIcon = document.getElementById('playIcon');
+        const vinylDisc = document.getElementById('vinylDisc');
+        const progressBar = document.getElementById('audioProgressBar');
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initParticles();
+            loadFromURLParams();
+            loadSong(currentSongIndex);
+            setupAudioEvents();
+        });
+
+        // Load specific song from playlist
+        function loadSong(index) {
+            if (index >= playlist.length) currentSongIndex = 0;
+            else if (index < 0) currentSongIndex = playlist.length - 1;
+            else currentSongIndex = index;
+
+            const song = playlist[currentSongIndex];
+            audio.src = song.url;
+            document.getElementById('displaySongTitle').textContent = song.title;
+            document.getElementById('currentSongIndexText').textContent = currentSongIndex + 1;
+            document.getElementById('totalSongsText').textContent = playlist.length;
+
+            if (isPlaying) {
+                audio.play();
+            }
+        }
+
+        // Change Song (Next/Prev)
+        function changeSong(direction) {
+            loadSong(currentSongIndex + direction);
+            if (!isPlaying) {
+                toggleAudio(true);
+            }
+            showToast(`تم تشغيل: ${playlist[currentSongIndex].title}`);
+        }
+
+        // Play/Pause Control
+        function toggleAudio(forcePlay = false) {
+            if (forcePlay || audio.paused) {
+                audio.play().then(() => {
+                    isPlaying = true;
+                    playIcon.className = 'fa-solid fa-pause text-lg';
+                    vinylDisc.style.animationPlayState = 'running';
+                }).catch(err => {
+                    console.log('Audio playback interaction needed:', err);
+                });
+            } else {
+                audio.pause();
+                isPlaying = false;
+                playIcon.className = 'fa-solid fa-play ml-0.5 text-lg';
+                vinylDisc.style.animationPlayState = 'paused';
+            }
+        }
+
+        // Password Verification Handlers
+        function openAuthModal() {
+            const modal = document.getElementById('authModal');
+            document.getElementById('inputPass').value = '';
+            document.getElementById('passError').classList.add('hidden');
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+        }
+
+        function closeAuthModal() {
+            const modal = document.getElementById('authModal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+
+        function verifyPassword(e) {
+            e.preventDefault();
+            const inputPass = document.getElementById('inputPass').value;
+
+            if (inputPass === ADMIN_PASSWORD) {
+                closeAuthModal();
+                showToast('تم الدخول بنجاح!');
+                setTimeout(() => {
+                    toggleEditModal();
+                }, 350);
+            } else {
+                document.getElementById('passError').classList.remove('hidden');
+            }
+        }
+
+        // Open Dedication Envelope Cover
+        function openDedication() {
+            const intro = document.getElementById('introScreen');
+            intro.style.transform = 'translateY(-100%)';
+            intro.style.opacity = '0';
+            setTimeout(() => {
+                intro.style.display = 'none';
+            }, 800);
+
+            toggleAudio(true);
+            triggerConfetti();
+        }
+
+        function setupAudioEvents() {
+            audio.addEventListener('timeupdate', () => {
+                if (audio.duration) {
+                    const progress = (audio.currentTime / audio.duration) * 100;
+                    progressBar.value = progress;
+                    document.getElementById('currentTime').textContent = formatTime(audio.currentTime);
+                    document.getElementById('durationTime').textContent = formatTime(audio.duration);
+                }
+            });
+
+            progressBar.addEventListener('input', () => {
+                if (audio.duration) {
+                    audio.currentTime = (progressBar.value / 100) * audio.duration;
+                }
+            });
+
+            // Auto play next song when ended
+            audio.addEventListener('ended', () => {
+                changeSong(1);
+            });
+        }
+
+        function formatTime(seconds) {
+            const min = Math.floor(seconds / 60);
+            const sec = Math.floor(seconds % 60);
+            return `${min}:${sec < 10 ? '0' : ''}${sec}`;
+        }
+
+        // Preset song choice inside admin modal
+        function handlePresetSongChange() {
+            const val = document.getElementById('selectSongPreset').value;
+            const customInputs = document.getElementById('customSongInputs');
+            if (val === 'custom') {
+                customInputs.classList.remove('hidden');
+            } else {
+                customInputs.classList.add('hidden');
+            }
+        }
+
+        function toggleEditModal() {
+            const modal = document.getElementById('editModal');
+            if (modal.classList.contains('hidden')) {
+                document.getElementById('inputOccasion').value = document.getElementById('displayOccasion').textContent;
+                document.getElementById('inputTo').value = document.getElementById('displayTo').textContent;
+                document.getElementById('inputFrom').value = document.getElementById('displayFrom').textContent;
+                document.getElementById('inputMessage').value = document.getElementById('displayMessage').textContent;
+                document.getElementById('inputImage').value = document.getElementById('displayImage').src;
+                document.getElementById('inputDate').value = document.getElementById('displayDate').textContent.trim();
+                
+                modal.classList.remove('hidden');
+                setTimeout(() => modal.classList.remove('opacity-0'), 10);
+            } else {
+                modal.classList.add('opacity-0');
+                setTimeout(() => modal.classList.add('hidden'), 300);
+            }
+        }
+
+        function saveCustomizations(e) {
+            e.preventDefault();
+            
+            const occasion = document.getElementById('inputOccasion').value;
+            const toName = document.getElementById('inputTo').value;
+            const fromName = document.getElementById('inputFrom').value;
+            const message = document.getElementById('inputMessage').value;
+            const imageUrl = document.getElementById('inputImage').value;
+            const dateStr = document.getElementById('inputDate').value;
+            const presetVal = document.getElementById('selectSongPreset').value;
+
+            if (occasion) document.getElementById('displayOccasion').textContent = occasion;
+            if (toName) {
+                document.getElementById('displayTo').textContent = toName;
+                document.getElementById('introRecipientName').textContent = `إهداء خاص إلى: ${toName} ✨`;
+            }
+            if (fromName) {
+                document.getElementById('displayFrom').textContent = fromName;
+                document.getElementById('displaySignature').textContent = fromName;
+            }
+            if (message) document.getElementById('displayMessage').textContent = message;
+            if (imageUrl) document.getElementById('displayImage').src = imageUrl;
+            if (dateStr) document.getElementById('displayDate').innerHTML = `<i class="fa-regular fa-calendar-alt ml-1"></i> ${dateStr}`;
+
+            // Handle Song Customization
+            if (presetVal === 'custom') {
+                const customTitle = document.getElementById('inputSongTitle').value || 'أغنية خاصة';
+                const customUrl = document.getElementById('inputAudioUrl').value;
+                if (customUrl) {
+                    playlist.unshift({ title: customTitle, url: customUrl });
+                    loadSong(0);
+                }
+            } else {
+                loadSong(parseInt(presetVal));
+            }
+
+            toggleEditModal();
+            showToast('تم حفظ كافة التغييرات والأغنية!');
+        }
+
+        function loadFromURLParams() {
+            const params = new URLSearchParams(window.location.search);
+            if (params.has('to')) {
+                const to = params.get('to');
+                document.getElementById('displayTo').textContent = to;
+                document.getElementById('introRecipientName').textContent = `إهداء خاص إلى: ${to} ✨`;
+            }
+            if (params.has('from')) {
+                document.getElementById('displayFrom').textContent = params.get('from');
+                document.getElementById('displaySignature').textContent = params.get('from');
+            }
+            if (params.has('msg')) {
+                document.getElementById('displayMessage').textContent = params.get('msg');
+            }
+            if (params.has('occ')) {
+                document.getElementById('displayOccasion').textContent = params.get('occ');
+            }
+        }
+
+        function copyShareLink() {
+            const to = encodeURIComponent(document.getElementById('displayTo').textContent);
+            const from = encodeURIComponent(document.getElementById('displayFrom').textContent);
+            const occ = encodeURIComponent(document.getElementById('displayOccasion').textContent);
+            
+            const shareUrl = `${window.location.origin}${window.location.pathname}?to=${to}&from=${from}&occ=${occ}`;
+            
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(shareUrl).then(() => showToast('تم نسخ رابط الإهداء!'));
+            } else {
+                const dummy = document.createElement('input');
+                document.body.appendChild(dummy);
+                dummy.value = shareUrl;
+                dummy.select();
+                document.execCommand('copy');
+                document.body.removeChild(dummy);
+                showToast('تم نسخ رابط الإهداء!');
+            }
+        }
+
+        function shareWhatsApp() {
+            const to = document.getElementById('displayTo').textContent;
+            const from = document.getElementById('displayFrom').textContent;
+            const shareUrl = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent(`❤️ وصلك إهداء خاص من (${from}) إلى (${to})\nافتح الرابط لمشاهدة البطاقة:\n`);
+            window.open(`https://api.whatsapp.com/send?text=${text}${shareUrl}`, '_blank');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').textContent = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        function triggerConfetti() {
+            for (let i = 0; i < 20; i++) {
+                createHeartParticle();
+            }
+        }
+
+        function createHeartParticle() {
+            const heart = document.createElement('div');
+            heart.className = 'fixed text-rose-500 pointer-events-none z-50 text-xl animate-bounce';
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.top = Math.random() * 50 + 'vh';
+            heart.style.opacity = '1';
+            heart.style.transition = 'all 2s ease-out';
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.style.transform = `translateY(-100px) scale(1.5)`;
+                heart.style.opacity = '0';
+            }, 50);
+
+            setTimeout(() => heart.remove(), 2000);
+        }
+
+        function initParticles() {
+            const canvas = document.getElementById('particleCanvas');
+            const ctx = canvas.getContext('2d');
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            const particles = Array.from({ length: 45 }, () => ({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 2 + 1,
+                color: Math.random() > 0.5 ? 'rgba(255, 215, 0, ' : 'rgba(244, 63, 94, ',
+                alpha: Math.random() * 0.5 + 0.2,
+                speedY: Math.random() * -0.6 - 0.2,
+                speedX: (Math.random() - 0.5) * 0.3
+            }));
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    p.y += p.speedY;
+                    p.x += p.speedX;
+
+                    if (p.y < 0) p.y = canvas.height;
+                    if (p.x < 0) p.x = canvas.width;
+                    if (p.x > canvas.width) p.x = 0;
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = p.color + p.alpha + ')';
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = p.color + '0.8)';
+                    ctx.fill();
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+    </script>
+</body>
+</html>
